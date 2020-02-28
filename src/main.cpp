@@ -21,9 +21,6 @@ RB3202_PID pid;
 //void testovani_motoru();
 bool read_joystick(); // definice dole pod hlavnim programem
 
-//void bateri_unloading(int bateri_number);
-//oid ultrasounic_pinmode();
-//float read_ultrasounic();
 
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
@@ -143,8 +140,7 @@ void loop()
         else
             rychlost_1 =0;
 
-        //Serial.print(poloha_0); Serial.print(" ");
-        //Serial.print(poloha_1); Serial.print(" ");
+ 
 
     }
 
@@ -175,71 +171,10 @@ void loop()
 
 // ************************ definice, ktere jinde nefunguji
 
-/*void start()
-{
-    vpred(1.1);
-    Serial.println("vlevo");
-    vlevo(1.1);
-    Serial.println("vpred1");
-    for (int x = 0; x != 4; ++x) {
-        vpred(1);
-    }
-    Serial.println("vpred2");
-    vpred(0.5);
-    Serial.println("hotovo");
-}
-*/
+
 // ********************************************************************
 
-/*bool read_joystick()
- {
-     if ( SerialBT.available() == 0 )
-         return false;
 
-     int test = SerialBT.read();
-     if (test == 0x80)
-     {
-         int axis_count = SerialBT.read();
-         for (int x = 0; x < axis_count; x++)
-         {
-             while(SerialBT.available() < 1)
-             {
-                 // DO NOTHING - WAITING FOR PACKET
-                 delay(1);
-             }
-             int8_t tmp = SerialBT.read();
-             axis[x] = tmp;
-             Serial.print(x);
-             Serial.print(": ");
-             Serial.print(axis[x], DEC);
-             Serial.print(" ");
-             SerialBT.print(x);
-             SerialBT.print(": ");
-             SerialBT.print(axis[x], DEC);
-             SerialBT.print(" ");
-
-         }
-         return true;
-     }
-     else if  ( test == 0x81 )
-     {
-         while(SerialBT.available() < 1) {
-             // DO NOTHING - WAITING FOR PACKET
-             delay(1);
-         }
-         byte a = SerialBT.read();
-         while(SerialBT.available() < 1) {
-             // DO NOTHING - WAITING FOR PACKET
-             delay(1);
-         }
-         btn_last[a] = btn[a];
-         btn[a] = SerialBT.read();
-         Serial.print(a, DEC); Serial.print(": "); Serial.print(btn[a], DEC); Serial.print("last: "); Serial.print(btn_last[a], DEC);
-         return true;
-     }
-     return false;
- }
-*/
 bool read_joystick()
 {
     if ( SerialBT.available() == 0 )
@@ -317,34 +252,6 @@ bool read_joystick()
 // //******************************************
 /*void testovani_serv()
 {
-
-     if(Serial.available()) {
-        char c = Serial.read();
-        switch(c) {
-            case 'w':
-                poloha_0++;
-                Serial.print("poloha_0  ");
-                Serial.println(poloha_0);
-                break;
-            case 's':
-                poloha_0--;
-                Serial.print("poloha_0  ");
-                Serial.println(poloha_0);
-                break;
-            case 'a':
-                poloha_1++;
-                Serial.print("poloha_1  ");
-                Serial.println(poloha_1);
-                break;
-            case 'd':
-                poloha_1--;
-                Serial.print("poloha_1  ");
-                Serial.println(poloha_1);
-                break;
-            default:
-                Serial.write(c);
-        }
-    }
     //rbc().servoBus().set(0,rb::Angle::deg(poloha_0),100.f,1.5f); // stav 0 = 25/130
     //rbc().servoBus().set(1,rb::Angle::deg(poloha_0),180.f,1.5f); // stav 1 = 180/80
 }
@@ -405,145 +312,4 @@ void testovani_motoru()
 
 
 }*/
-/*
-void bateri_unloading(int bateri_number)
-{
-    if (bateri_number == 0)
-    {
-        rbc().setMotors().power(RIGHT_MOTOR, 60)
-                         .power(LEFT_MOTOR, 60)
-                         .set();
-        delay(1500);
-        rbc().motor(LEFT_MOTOR )->drive(-otacka*0.5, 60, nullptr);
-        rbc().motor(RIGHT_MOTOR)->drive(-otacka*0.5, 60, nullptr);
-        delay(1000);
-        while (read_ultrasounic()<13)
-        {
-            rbc().motor(LEFT_MOTOR )->drive(-otacka*0.04547, 40, nullptr);
-            rbc().motor(RIGHT_MOTOR)->drive(-otacka*0.04547, 40, nullptr);
-            delay(50);
-        }
-        while(read_ultrasounic()>13.5)
-        {
-            rbc().motor(LEFT_MOTOR )->drive(otacka*0.04547, 40, nullptr);
-            rbc().motor(RIGHT_MOTOR)->drive(otacka*0.04547, 40, nullptr);
-            delay(50);
-        }
-        rbc().servoBus().set(1,rb::Angle::deg(175),180.f,1.5f);
-        delay(1000);
-        rbc().motor(LEFT_MOTOR)->drive(-otacka * 0.5, 50, nullptr);
-        rbc().motor(RIGHT_MOTOR)->drive(-otacka * 0.5, 50, nullptr);
-        delay(1000);
-        rbc().servoBus().set(1,rb::Angle::deg(35),180.f,1.5f);
-        delay(200);
-    }
-    else if (bateri_number == 1)
-    {
-        rbc().setMotors().power(RIGHT_MOTOR, 60)
-                         .power(LEFT_MOTOR, 60)
-                         .set();
-        delay(1500);
-        rbc().motor(LEFT_MOTOR )->drive(-otacka*0.5, 60, nullptr);
-        rbc().motor(RIGHT_MOTOR)->drive(-otacka*0.5, 60, nullptr);
-        delay(1000);
-        while (read_ultrasounic()<4.3)
-        {
-            rbc().motor(LEFT_MOTOR )->drive(-otacka*0.04547, 50, nullptr);
-            rbc().motor(RIGHT_MOTOR)->drive(-otacka*0.04547, 50, nullptr);
-            delay(50);
-        }
-        while(read_ultrasounic()>4.5)
-        {
-            rbc().motor(LEFT_MOTOR )->drive(otacka*0.04547, 50, nullptr);
-            rbc().motor(RIGHT_MOTOR)->drive(otacka*0.04547, 50, nullptr);
-            delay(50);
-        }
-        rbc().servoBus().set(1,rb::Angle::deg(140),100.f,15.0f);
-        delay(1000);
-        rbc().servoBus().set(1,rb::Angle::deg(75),100.f,15.0f);
-        rbc().motor(RIGHT_MOTOR)->drive(-otacka * 1.5 , 50, nullptr);
-        rbc().motor(LEFT_MOTOR )->drive(-otacka * 1.5 , 50, nullptr);
-        delay(1200);
-        rbc().servoBus().set(1,rb::Angle::deg(35),180.f,1.5f);
-    }
-    else if (bateri_number == 2)
-    {
-        rbc().setMotors().power(RIGHT_MOTOR, 60)
-                         .power(LEFT_MOTOR, 60)
-                         .set();
-        delay(1500);
-        rbc().motor(LEFT_MOTOR )->drive(-otacka*0.5, 60, nullptr);
-        rbc().motor(RIGHT_MOTOR)->drive(-otacka*0.5, 60, nullptr);
-        delay(1000);
-        while (read_ultrasounic()<4.3)
-        {
-            rbc().motor(LEFT_MOTOR )->drive(-otacka*0.04547, 50, nullptr);
-            rbc().motor(RIGHT_MOTOR)->drive(-otacka*0.04547, 50, nullptr);
-            delay(50);
-        }
-        while(read_ultrasounic()>4.5)
-        {
-            rbc().motor(LEFT_MOTOR )->drive(otacka*0.04547, 50, nullptr);
-            rbc().motor(RIGHT_MOTOR)->drive(otacka*0.04547, 50, nullptr);
-            delay(50);
-        }
-        rbc().servoBus().set(0,rb::Angle::deg(35),100.f,15.0f);
-        delay(1000);
-        rbc().servoBus().set(0,rb::Angle::deg(100),100.f,15.0f);
-        rbc().motor(RIGHT_MOTOR)->drive(-otacka * 1.5 , 50, nullptr);
-        rbc().motor(LEFT_MOTOR )->drive(-otacka * 1.5 , 50, nullptr);
-        delay(1000);
-        rbc().servoBus().set(0,rb::Angle::deg(30),180.f,1.5f);
-    }
-    else if (bateri_number == 3)
-    {
-        rbc().setMotors().power(RIGHT_MOTOR, 60)
-                         .power(LEFT_MOTOR, 60)
-                         .set();
-        delay(1500);
-        rbc().motor(LEFT_MOTOR )->drive(-otacka*0.5, 60, nullptr);
-        rbc().motor(RIGHT_MOTOR)->drive(-otacka*0.5, 60, nullptr);
-        delay(1000);
-        while (read_ultrasounic()<4.3)
-        {
-            rbc().motor(LEFT_MOTOR )->drive(-otacka*0.04547, 50, nullptr);
-            rbc().motor(RIGHT_MOTOR)->drive(-otacka*0.04547, 50, nullptr);
-            delay(50);
-        }
-        while(read_ultrasounic()>4.5)
-        {
-            rbc().motor(LEFT_MOTOR )->drive(otacka*0.04547, 50, nullptr);
-            rbc().motor(RIGHT_MOTOR)->drive(otacka*0.04547, 50, nullptr);
-            delay(50);
-        }
-        rbc().servoBus().set(0,rb::Angle::deg(70),100.f,15.0f);
-        delay(1000);
-        rbc().servoBus().set(0,rb::Angle::deg(135),100.f,15.0f);
-        rbc().motor(RIGHT_MOTOR)->drive(-otacka * 1.5 , 50, nullptr);
-        rbc().motor(LEFT_MOTOR )->drive(-otacka * 1.5 , 50, nullptr);
-        delay(1200);
-        rbc().servoBus().set(1,rb::Angle::deg(175),180.f,1.5f);
-    }
-}
 
-void ultrasounic_pinmode()
-{
-    pinMode(Echo, INPUT);
-    pinMode(Trig, OUTPUT);
-}
-
-float read_ultrasounic()
-{
-    digitalWrite(Trig, LOW);
-    delayMicroseconds(2);
-    digitalWrite(Trig, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(Trig, LOW); // Spočítá vzdálenost
-    float distance = pulseIn(Echo, HIGH);
-    distance = distance*0.017315f; // odešle informace na sérivý port
-    Serial.print(distance);
-    Serial.print("cm\n");
-    delay(200);
-    return distance;
-}
-*/
