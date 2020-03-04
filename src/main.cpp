@@ -16,9 +16,6 @@ int pravy_m;
 
 RB3202_PID pid;
 
-//void start();
-//void testovani_serv();
-//void testovani_motoru();
 bool read_joystick(); // definice dole pod hlavnim programem
 
 
@@ -67,8 +64,7 @@ void loop()
         if (L_G_light) L_G_light = false; else  L_G_light = true;
         SerialBT.println(millis());
     }
- //     testovani_serv();  // pozor, kdyz je zapnuto, rusi ostatni ovladani serv
- //void testovani_motoru();
+ 
 
  if(!digitalRead(RB3202::SW0))
   {
@@ -92,7 +88,6 @@ void loop()
   }
   pid.set_rotate(speed,speed);
   
-  
 
  if ( read_joystick() ) {
         float axis_0 = (abs(axis[0]) < 3) ? 0 : axis[0] /128.0;
@@ -111,68 +106,50 @@ void loop()
         {
             SerialBT.print("osa 5 roste");
             Serial.print("osa 5 roste");
-            /*rbc().servoBus().set(0, rb::Angle::deg(35), 300.f, 1.5f);
-            rbc().servoBus().set(1, rb::Angle::deg(30), 300.f, 1.5f);
-            poloha_0 = 35;
-            poloha_1 = 175;*/
+            
         }
         if (axis[5] < -100 ) // pouze zapnuto/vypnuto
         {
             SerialBT.print("osa 5 klesa");
             Serial.print("osa 5 klesa");
-            /*rbc().servoBus().set(0, rb::Angle::deg(100), 300.f, 1.5f);
-            rbc().servoBus().set(1, rb::Angle::deg(50), 300.f, 1.5f);
-            poloha_0 = 100;
-            poloha_1 = 110;*/
+            
         }
         float rychlost = (-axis[2]+129)/128.0;
         if (btn[5] == 1 )
-            rychlost_0 = rychlost;
+            ;
         else if (btn[6] == 1 )
-             rychlost_0 = -rychlost;
+             ;
         else
-            rychlost_0 =0;
+            ;
 
         if (btn[8] == 1 )
-            rychlost_1 = rychlost;
+            ;
         else if (btn[7] == 1 )
-             rychlost_1 = -rychlost;
+            ;
         else
-            rychlost_1 =0;
-
- 
+            ;
 
     }
-
-
 
     if(btn[9])
     {
-      SerialBT.print(levy_m); SerialBT.print(" "); SerialBT.println(pravy_m);
-      Serial.print(levy_m); Serial.print(" "); Serial.println(pravy_m);
-        //bateri_unloading(0);
+      
     }
     if(btn[10])
     {
-        //bateri_unloading(1);
+      
     }
     if(btn[11])
     {
-        //bateri_unloading(2);
+      
     }
     if(btn[12])
     {
-        //bateri_unloading(3);
+    
     }
-    //rbc().servoBus().set(0, poloha_rb::Angle::deg(0), 200.f, 1.5f);
-    //rbc().servoBus().set(1, rb::Angle::deg(poloha_1), 200.f, 1.5f);
-    delay(10);  
+    
+  
 }
-
-// ************************ definice, ktere jinde nefunguji
-
-
-// ********************************************************************
 
 
 bool read_joystick()
@@ -248,68 +225,3 @@ bool read_joystick()
     }
     return false;
 }
-
-// //******************************************
-/*void testovani_serv()
-{
-    //rbc().servoBus().set(0,rb::Angle::deg(poloha_0),100.f,1.5f); // stav 0 = 25/130
-    //rbc().servoBus().set(1,rb::Angle::deg(poloha_0),180.f,1.5f); // stav 1 = 180/80
-}
-*//*
-void testovani_motoru()
-{
-   if(Serial.available()) {
-        char c = Serial.read();
-        switch(c) {
-            case 'w':
-                 driver.solo_power(power_motor,LEFT_MOTOR);
-                 driver.solo_power(power_motor,RIGHT_MOTOR);
-       
-                break;
-            case 's':
-                 driver.solo_power(-power_motor,LEFT_MOTOR);
-                 driver.solo_power(-power_motor,RIGHT_MOTOR);
-                break;
-            case 'a':
-                 driver.solo_power(-power_motor,LEFT_MOTOR);
-                 driver.solo_power(power_motor,RIGHT_MOTOR);
-                break;
-            case 'd':
-                 driver.solo_power(power_motor,LEFT_MOTOR);
-                 driver.solo_power(-power_motor,RIGHT_MOTOR);
-                break;
-            case '*':
-                c = '0' + 10;
-            case '0' ... '9':
-                power_motor = (c - '0') * 10;
-                Serial.println(power_motor);
-                break;
-                //rbc().motor(LEFT_MOTOR)->drive(otacka * (c - '0'), 64, nullptr);
-                //rbc().motor(RIGHT_MOTOR)->drive(otacka * (c - '0'), 64, nullptr); //  tik; na otacku
-                break;
-
-            case ' ':
-                 driver.solo_power(0,LEFT_MOTOR);
-                 driver.solo_power(0,RIGHT_MOTOR);
-                break;
-
-            case 'i':// vpred(1);
-                break;
-            case 'k':// vpravo(1);
-                break;
-            case 'm': //vpred(-1);
-                break;
-            case 'j': //vlevo(1);
-                break;
-            case 'p': //vpravo_na_miste(1);
-                break;
-
-            default:
-                Serial.write(c);
-                break;
-        }
-    }
-
-
-}*/
-
